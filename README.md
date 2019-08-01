@@ -8,7 +8,7 @@ In order to solve the above mentioned problems, I developed a partially supervis
 
 The big idea is, although we don't know how many topics in the corpus, we can find at least there is one most important topic that we care the most by reviewing the samples of the medical notes. Therefore, we can seperate the medical notes into two super-classes:
 
-         **Ti vs To** 
+**Ti vs To** 
          
             Ti: Topic of interest
             To: Other topics
