@@ -10,7 +10,7 @@ The big idea is, although we don't know how many topics in the corpus, we can fi
 
 **_Ti vs To_** 
 
-         Ti: Topic of interest
-         To: Other topics
+         Ti: Topic of interest, topic 1
+         To: Other topics, topic 2,3,4.....N
          
  
