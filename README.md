@@ -6,11 +6,15 @@ I have tested the performance of LDA and NMF on a collection of medical notes da
 
 In order to solve the above mentioned problems, I developed a partially supervised LDA method for medical notes classification.
 
-The big idea is, although we don't know how many topics in the corpus, we can find at least there is one most important topic that we care the most by reviewing the samples of the medical notes. Therefore, we can seperate the medical notes into two super-classes:
+The big idea is, although we don't know how many topics in the corpus, we can find at least one most important topic that we care the most by reviewing the samples of the medical notes. Therefore, we can seperate the medical notes into two super-classes:
 
-**_Ti vs To_** 
+**_T1 vs T0_** 
 
-         Ti: Topic of interest, topic 1
-         To: Other topics, topic 2,3,4.....N
+         T1: Topic of interest, topic 1
+         T0: All other topics, topic 2,3,4.....N
          
+We can find the T1 medical notes by looking for specific word(s) in them and label them as 1, all other notes will be labeled as 0. These labels can be used in hyper-parameter tuning to determine the appropriate number of topics, as well as keep topic consistency.
+ 
+ 
+ 
  
