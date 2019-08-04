@@ -18,8 +18,17 @@ The big idea is, although we don't know how many topics in the corpus, we can fi
          
 We can find the T1 medical notes by looking for specific word(s) in them and label them as 1, all other notes will be labeled as 0. These labels can be used in hyper-parameter tuning to determine the appropriate number of topics, as well as keep topic consistency.
 
+##### Backgrounds
 
- 
- 
+We have hundreds to thousands of medical notes logged into the database every day in addition to well defined structure data. These notes document moderate to severe symptoms, as well as routine operations that are not suitable to be recorded in the structured data, i.e. tables with predefined columns. These medical notes are valuable compliment information to the structure data, but they were rarely analyzed systematically. 
+
+In order to extract information from the medical notes, we tried LDA and NMF topic models to classify the notes into topics. Pilot studies found that the results from NMF models are stable, but less accurate and less human interpretable. LDA models give much better accuracy and human interpretable, however the topic instability can be a big problem when deploy to production.
+
+Here, I developed a partially-supervised LDA method for hyper parameter tuning to improve topic stability and determine the appropriate number of topics.
+
+##### Method and Results
+
+
+
  
  
