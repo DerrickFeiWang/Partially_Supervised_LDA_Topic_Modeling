@@ -93,6 +93,9 @@ G1_Topic['drug'] = G1_Topic['ProcessedDoc'].str.contains('drugName').astype('int
 G1_Topic['drug'].value_counts()
 ```
 ### 4. Optimize the hyper parameters using f1 score, perplexity and coherence score.
+
+We have labeled the notes with either it's about the drug usage (actual positive, 1) or not (actual negative, 0). After labeling the notes with the topics learnt from the LDA model, we will take the topic ID that consists the most of documents relating the drug as the predicted positive, all other topics are considered as predicted negative. Thus, we can calculate the precision, recall and f1 score with the following code.
+
 #### 4.1 Determine the appropriate number of topics
 
 ```python
@@ -135,7 +138,7 @@ for NumTopic in range(2, 20):
     RstList.append(lst)
     
 ```
-The above function will calculate precision,recall, f1, as well as coherence score and perplexity which were provided by default from the sklearn LDA algorithm.
+The above function will return precision,recall, f1, as well as coherence score and perplexity which were provided by default from the sklearn LDA algorithm.
 
 ![Figure 4](https://user-images.githubusercontent.com/44976640/64360335-e34a7b80-cfcf-11e9-823c-29e90c034ee6.JPG)
 
