@@ -28,8 +28,9 @@ Here, I developed a partially-supervised LDA method for hyper parameter tuning t
 
 ##### Method and Results
 
-1. Data Preprocessing: Lematization, stemming and remove stop words
+1. Data Preprocessing
 
+First, we will cpnvert the text documents ("Notes") into word lists by lematization, stemming and removing stop words.
 ```python
 def lemmatize_stemming(text):
     return stemmer.stem(WordNetLemmatizer().lemmatize(text, pos='v'))
@@ -40,6 +41,98 @@ def preprocess(text, n):    # n: the minimum length of a word
         if token not in gensim.parsing.preprocessing.STOPWORDS and len(token) > n:
             result.append(lemmatize_stemming(token))
     return ' '.join(result)
+    
+G1_processed_docs = G1['Notes'].apply(lambda x: preprocess(x, 2))
+G1_processed_docs = list(G1_processed_docs)
+
 ```
- 
- 
+
+2. Convert word lists to word vector
+We will use count vectorizer from the sklearn library for this purpose.
+
+```python
+Count_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
+                                max_features=4500,
+                                stop_words='english')
+
+G1_cv = Count_vectorizer.fit_transform(G1_processed_docs)
+```
+
+3. Find out a important topic for labeling
+Since the notes in our dataset are from one medical treatment for a specific group of patients, we presume the number of topics in these medical notes is small. We run a preliminary test with 5 topics in order to get a flavor of the major topic that we care the most.
+
+```python
+n_testTpoics = 5
+
+G1_lda = LatentDirichletAllocation(n_components  = n_testTpoics,
+                                learning_method='online',
+                                learning_offset=50.
+                               )
+G1_lda.fit(G1_cv)
+G1_LdaRstMatrix = G1_lda.transform(G1_cv)
+G1_LdaRst = G1_LdaRstMatrix.argmax(axis=1)
+```
+We then use the pyLDAvis to visualize the topics and their key words.
+
+```python
+import pyLDAvis
+import pyLDAvis.sklearn
+
+pyLDAvis.enable_notebook()
+panel = pyLDAvis.sklearn.prepare(G1_lda, G1_cv, Count_vectorizer, mds='tsne')
+panel
+```
+![Figure 3](https://user-images.githubusercontent.com/44976640/64359457-f9efd300-cfcd-11e9-826e-4a3491ef7f5b.JPG)
+From the result of LDAvis, we identified one topic is talking about the usage of an expensive drug, we labeled all notes that mentioned this drug as 1, then use this label to calculate the precision, recall and f1 scores.
+
+```python
+G1_Topic = pd.DataFrame(G1_processed_docs, columns = ['ProcessedDoc'])
+G1_Topic['drug'] = G1_Topic['ProcessedDoc'].str.contains('drugName').astype('int')
+G1_Topic['drug'].value_counts()
+```
+4. Optimize the hyper parameters using f1 score, perplexity and coherence score.
+4.1 Determine the appropriate number of topics
+
+```python
+def optimizeNumTopics(NumTopic):
+    G1_lda = LatentDirichletAllocation(n_components = NumTopic,
+                                       max_iter=3,
+                                        learning_method='online',
+                                        learning_offset=50.,
+                                        random_state = 4
+                                      )
+    
+    G1_lda.fit(G1_cv)
+    G1_LdaRst = G1_lda.transform(G1_cv)
+    G1_LdaRst = G1_LdaRst.argmax(axis=1)
+
+    G1_Topic['Topic'] = G1_LdaRst
+    ss = G1_Topic.groupby(['drug','Topic']).count().reset_index()
+    ss = ss.rename(columns = {'ProcessedDoc':'DocCounts'})    
+
+    TargetTopic = ss.loc[(ss['drug'] == 1) & 
+                    (ss['DocCounts'] == max(ss['DocCounts'].loc[ss['drug']==1]))
+                    ,"Topic"].values[0]
+
+    fp = ss['DocCounts'][ (ss['drug']==0) & (ss['Topic']==TargetTopic) ].values[0]
+    tp = ss['DocCounts'][ (ss['drug']==1) & (ss['Topic']==TargetTopic) ].values[0]
+    precision = tp/(fp + tp)
+    recall = tp/(sum(ss['DocCounts'][ss['epo']==1]))
+    f1 = 2 * precision * recall / (precision + recall)
+    
+    score = G1_lda.score(G1_cv)
+    perplexity = G1_lda.perplexity(G1_cv)
+    
+    
+    return [NumTopic, precision,recall, f1, score, perplexity]
+    
+RstList = []
+for NumTopic in range(2, 20):    
+    print('Now testing NumTopic ', NumTopic)
+    lst =  optimizeNumTopics(NumTopic)
+    RstList.append(lst)
+    
+```
+
+
+
