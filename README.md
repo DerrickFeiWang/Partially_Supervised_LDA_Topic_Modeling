@@ -83,6 +83,8 @@ panel = pyLDAvis.sklearn.prepare(G1_lda, G1_cv, Count_vectorizer, mds='tsne')
 panel
 ```
 ![Figure 3](https://user-images.githubusercontent.com/44976640/64359457-f9efd300-cfcd-11e9-826e-4a3491ef7f5b.JPG)
+Note: Key words in the above picture were intentionally masked.
+
 From the result of LDAvis, we identified one topic is talking about the usage of an expensive drug, we labeled all notes that mentioned this drug as 1, then use this label to calculate the precision, recall and f1 scores.
 
 ```python
@@ -133,6 +135,15 @@ for NumTopic in range(2, 20):
     RstList.append(lst)
     
 ```
+The above function will calculate precision,recall, f1, as well as coherence score and perplexity which were provided by default from the sklearn LDA algorithm.
+![Figure 4](https://user-images.githubusercontent.com/44976640/64360335-e34a7b80-cfcf-11e9-823c-29e90c034ee6.JPG)
+
+With considering f1, perplexity and coherence score in this example, we can decide that 9 topics is a propriate number of topics.
+
+4.2 Hyper parameter tuning and model stability.
+    Although LDA algorithm suffering from topic un-stable issue, we found that the models with highest f1 scores are relatively consistent with each other. The reason is that LDA was known as a non-convex algorithm. Each run will reach a local optimal, but you can't expect that any given run would be the global optimal. But the highest local optimal are tend to render results close to global optimal, therefore, results from "best" local optimal models are relatively consistent to each other to a certain extent.
+
+
 
 
 
