@@ -148,8 +148,7 @@ With considering f1, perplexity and coherence score in this example, we can deci
 
 Although LDA algorithm suffering from topic un-stable issue, we found that the models with highest f1 scores are relatively consistent with each other. The reason is that LDA was known as a non-convex algorithm. Each run will reach a local optimal, but you can't expect that any given run would be the global optimal. But the highest local optimal are tend to render results close to global optimal, therefore, results from "best" local optimal models are relatively consistent to each other to a certain extent.
     
-    
-    
+  
     
 
 
