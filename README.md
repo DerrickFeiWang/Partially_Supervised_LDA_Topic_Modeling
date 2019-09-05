@@ -136,13 +136,18 @@ for NumTopic in range(2, 20):
     
 ```
 The above function will calculate precision,recall, f1, as well as coherence score and perplexity which were provided by default from the sklearn LDA algorithm.
+
 ![Figure 4](https://user-images.githubusercontent.com/44976640/64360335-e34a7b80-cfcf-11e9-823c-29e90c034ee6.JPG)
 
 With considering f1, perplexity and coherence score in this example, we can decide that 9 topics is a propriate number of topics.
 
 #### 4.2 Hyper parameter tuning and model stability.
 
-    Although LDA algorithm suffering from topic un-stable issue, we found that the models with highest f1 scores are relatively consistent with each other. The reason is that LDA was known as a non-convex algorithm. Each run will reach a local optimal, but you can't expect that any given run would be the global optimal. But the highest local optimal are tend to render results close to global optimal, therefore, results from "best" local optimal models are relatively consistent to each other to a certain extent.
+Although LDA algorithm suffering from topic un-stable issue, we found that the models with highest f1 scores are relatively consistent with each other. The reason is that LDA was known as a non-convex algorithm. Each run will reach a local optimal, but you can't expect that any given run would be the global optimal. But the highest local optimal are tend to render results close to global optimal, therefore, results from "best" local optimal models are relatively consistent to each other to a certain extent.
+    
+    
+    
+    
 
 
 
