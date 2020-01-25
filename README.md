@@ -58,7 +58,7 @@ Count_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
 G1_cv = Count_vectorizer.fit_transform(G1_processed_docs)
 ```
 
-### 3. Find out a important topic for labeling
+### 3. Find out an important topic for labeling
 Since the notes in our dataset are from one medical treatment for a specific group of patients, we presume the number of topics in these medical notes is small. We run a preliminary test with 5 topics in order to get a flavor of the major topic that we care the most.
 
 ```python
